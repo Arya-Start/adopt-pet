@@ -1,9 +1,10 @@
 <template>
-  <div class="home">
+  <div class="home home-view-container">
+    <h1>New BestFriend</h1>
     <h1>{{ animalsCount }}</h1>
 
     <button @click="toggleForm" class="btn btn-primary">Add New Pet</button>
-    <b-form @submit.prevent="onSubmit" v-if="showForm">
+    <b-form @submit.prevent="petSubmit" v-if="showForm">
       <b-form-group id="input-group-1" label="Pet name:" label-for="input-1">
         <b-form-input
           id="input-1"
@@ -25,9 +26,9 @@
       <b-form-group id="input-group-3" label="Species:" label-for="input-3">
         <b-form-select
           id="input-3"
-          required
           v-model="formData.species"
           :options="animals"
+          required
         ></b-form-select>
       </b-form-group>
 
@@ -44,22 +45,23 @@ export default {
     return {
       showForm: false,
       formData: {
-        name: "",
+        name: "name",
         age: 0,
         species: null
       },
-      animals: [{ text: "Select One", value: null }, "Dogs", "Cats"]
+      animals: [{ text: "Select One", value: this.species }, "dogs", "cats"]
     };
   },
   computed: {
-    ...mapGetters(["animalsCount"])
+    ...mapGetters(["animalsCount", "testStateFromGetter"])
   },
   methods: {
     toggleForm: function() {
       this.showForm = !this.showForm;
     },
-    onSubmit: function() {
+    petSubmit() {
       const { species, name, age } = this.formData;
+
       const payload = {
         species,
         pet: {
